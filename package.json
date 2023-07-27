@@ -3,7 +3,8 @@
   "version": "0.0.1",
   "description": "",
   "type": "module",
-  "main": "index.js",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "napi": {
     "triples": {
       "defaults": true,
