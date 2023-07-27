@@ -22,10 +22,10 @@
     "artifacts": "napi artifacts",
     "build": "napi build --platform --release --js bindings.cjs --dts bindings.d.cts --cargo-cwd ./bindings src && tsc",
     "build:debug": "napi build --platform",
-    "prepublishOnly": "napi prepublish -t npm -p scripts/npm",
+    "prepublishOnly": "napi prepublish -t npm -p packages",
     "test": "ava",
     "universal": "napi universal",
-    "version": "napi version -p scripts/npm"
+    "version": "napi version -p packages"
   },
   "devDependencies": {
     "@napi-rs/cli": "^2.16.2",
