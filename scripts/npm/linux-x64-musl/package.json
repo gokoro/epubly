@@ -1,0 +1,21 @@
+{
+  "name": "@fast-epub-js/core-linux-x64-musl",
+  "version": "1.0.0",
+  "os": [
+    "linux"
+  ],
+  "cpu": [
+    "x64"
+  ],
+  "main": "index.linux-x64-musl.node",
+  "files": [
+    "index.linux-x64-musl.node"
+  ],
+  "description": "",
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "libc": [
+    "musl"
+  ]
+}

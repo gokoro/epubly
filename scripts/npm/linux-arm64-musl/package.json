@@ -1,0 +1,21 @@
+{
+  "name": "@fast-epub-js/core-linux-arm64-musl",
+  "version": "1.0.0",
+  "os": [
+    "linux"
+  ],
+  "cpu": [
+    "arm64"
+  ],
+  "main": "index.linux-arm64-musl.node",
+  "files": [
+    "index.linux-arm64-musl.node"
+  ],
+  "description": "",
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "libc": [
+    "musl"
+  ]
+}
