@@ -1,5 +1,5 @@
 {
-  "name": "@fast-epub-js/core",
+  "name": "@epubly/core",
   "version": "0.0.1",
   "description": "",
   "type": "module",
@@ -38,14 +38,14 @@
     "typescript": "^5.1.6"
   },
   "optionalDependencies": {
-    "@fast-epub-js/core-win32-x64-msvc": "0.0.1",
-    "@fast-epub-js/core-darwin-x64": "0.0.1",
-    "@fast-epub-js/core-linux-x64-gnu": "0.0.1",
-    "@fast-epub-js/core-linux-x64-musl": "0.0.1",
-    "@fast-epub-js/core-linux-arm64-gnu": "0.0.1",
-    "@fast-epub-js/core-darwin-arm64": "0.0.1",
-    "@fast-epub-js/core-linux-arm64-musl": "0.0.1",
-    "@fast-epub-js/core-win32-arm64-msvc": "0.0.1"
+    "@epubly/core-win32-x64-msvc": "0.0.1",
+    "@epubly/core-darwin-x64": "0.0.1",
+    "@epubly/core-linux-x64-gnu": "0.0.1",
+    "@epubly/core-linux-x64-musl": "0.0.1",
+    "@epubly/core-linux-arm64-gnu": "0.0.1",
+    "@epubly/core-darwin-arm64": "0.0.1",
+    "@epubly/core-linux-arm64-musl": "0.0.1",
+    "@epubly/core-win32-arm64-msvc": "0.0.1"
   },
   "keywords": [],
   "author": "",

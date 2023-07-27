@@ -1,3 +1,3 @@
-# `@fast-epub-js/core-darwin-arm64`
+# `@epubly/core-darwin-arm64`
 
-This is the **aarch64-apple-darwin** binary for `@fast-epub-js/core`
+This is the **aarch64-apple-darwin** binary for `@epubly/core`

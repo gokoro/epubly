@@ -1,5 +1,5 @@
 {
-  "name": "@fast-epub-js/core-linux-x64-gnu",
+  "name": "@epubly/core-linux-x64-gnu",
   "version": "0.0.1",
   "os": [
     "linux"

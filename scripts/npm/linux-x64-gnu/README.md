@@ -1,3 +1,3 @@
-# `@fast-epub-js/core-linux-x64-gnu`
+# `@epubly/core-linux-x64-gnu`
 
-This is the **x86_64-unknown-linux-gnu** binary for `@fast-epub-js/core`
+This is the **x86_64-unknown-linux-gnu** binary for `@epubly/core`

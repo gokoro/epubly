@@ -1,3 +1,3 @@
-# `@fast-epub-js/core-win32-x64-msvc`
+# `@epubly/core-win32-x64-msvc`
 
-This is the **x86_64-pc-windows-msvc** binary for `@fast-epub-js/core`
+This is the **x86_64-pc-windows-msvc** binary for `@epubly/core`

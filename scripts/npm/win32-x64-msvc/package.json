@@ -1,5 +1,5 @@
 {
-  "name": "@fast-epub-js/core-win32-x64-msvc",
+  "name": "@epubly/core-win32-x64-msvc",
   "version": "0.0.1",
   "os": [
     "win32"
