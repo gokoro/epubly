@@ -84,7 +84,6 @@ jobs:
         with:
           node-version: 18
           check-latest: true
-          cache: pnpm
 
       - name: Install
         uses: dtolnay/rust-toolchain@stable
@@ -314,7 +313,6 @@ jobs:
         with:
           node-version: 18
           check-latest: true
-          cache: pnpm
 
       - name: Install dependencies
         run: pnpm install --no-frozen-lockfile
