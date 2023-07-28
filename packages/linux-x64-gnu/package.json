@@ -7,7 +7,7 @@
   "cpu": [
     "x64"
   ],
-  "main": "index.linux-x64-gnu.node",
+  "main": "core.linux-x64-gnu.node",
   "files": [
     "index.linux-x64-gnu.node"
   ],

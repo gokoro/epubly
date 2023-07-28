@@ -1,3 +1,4 @@
 {
-  "rust-analyzer.linkedProjects": ["./bindings/Cargo.toml"]
+  "rust-analyzer.linkedProjects": ["./bindings/Cargo.toml"],
+  "typescript.tsdk": "node_modules/typescript/lib"
 }

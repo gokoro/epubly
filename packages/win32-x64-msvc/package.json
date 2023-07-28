@@ -7,7 +7,7 @@
   "cpu": [
     "x64"
   ],
-  "main": "index.win32-x64-msvc.node",
+  "main": "core.win32-x64-msvc.node",
   "files": [
     "index.win32-x64-msvc.node"
   ],

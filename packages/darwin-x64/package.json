@@ -7,7 +7,7 @@
   "cpu": [
     "x64"
   ],
-  "main": "index.darwin-x64.node",
+  "main": "core.darwin-x64.node",
   "files": [
     "index.darwin-x64.node"
   ],

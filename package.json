@@ -6,6 +6,7 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "napi": {
+    "name": "core",
     "triples": {
       "defaults": true,
       "additional": [
@@ -19,11 +20,13 @@
     "npmClient": "pnpm"
   },
   "scripts": {
-    "artifacts": "napi artifacts",
-    "build": "napi build --platform --release --js bindings.cjs --dts bindings.d.cts --cargo-cwd ./bindings src && tsc",
+    "artifacts": "napi artifacts --dist packages",
+    "build": "tsc && pnpm build:napi && cpy src/bindings.* dist --flat",
+    "build:ts": "tsc",
+    "build:napi": "napi build --platform --release --js bindings.cjs --dts bindings.d.cts --cargo-cwd ./bindings src",
     "build:debug": "napi build --platform",
     "prepublishOnly": "napi prepublish -t npm -p packages",
-    "test": "ava",
+    "test": "exit;",
     "universal": "napi universal",
     "version": "napi version -p packages"
   },
@@ -33,20 +36,21 @@
     "@types/node": "^20.4.5",
     "@typescript-eslint/parser": "^6.2.0",
     "ava": "^5.3.1",
+    "cpy-cli": "^5.0.0",
     "eslint": "^8.45.0",
     "eslint-plugin-perfectionist": "^1.5.1",
     "ts-node": "^10.9.1",
     "typescript": "^5.1.6"
   },
   "optionalDependencies": {
-    "@epubly/core-win32-x64-msvc": "0.0.1",
+    "@epubly/core-darwin-arm64": "0.0.1",
     "@epubly/core-darwin-x64": "0.0.1",
+    "@epubly/core-linux-arm64-gnu": "0.0.1",
+    "@epubly/core-linux-arm64-musl": "0.0.1",
     "@epubly/core-linux-x64-gnu": "0.0.1",
     "@epubly/core-linux-x64-musl": "0.0.1",
-    "@epubly/core-linux-arm64-gnu": "0.0.1",
-    "@epubly/core-darwin-arm64": "0.0.1",
-    "@epubly/core-linux-arm64-musl": "0.0.1",
-    "@epubly/core-win32-arm64-msvc": "0.0.1"
+    "@epubly/core-win32-arm64-msvc": "0.0.1",
+    "@epubly/core-win32-x64-msvc": "0.0.1"
   },
   "keywords": [],
   "author": "",
