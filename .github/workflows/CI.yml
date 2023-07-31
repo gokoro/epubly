@@ -323,7 +323,7 @@ jobs:
       - name: Install dependencies
         run: pnpm install --no-frozen-lockfile
       - name: Build TypeScript files
-        run: pnpm build:ts && && pnpm copy-bindings
+        run: pnpm build:ts && pnpm copy-bindings
       - name: Download all artifacts
         uses: actions/download-artifact@v3
         with:
