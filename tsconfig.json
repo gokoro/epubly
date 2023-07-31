@@ -10,5 +10,6 @@
     "strict": true,
     "skipLibCheck": true,
     "allowJs": true
-  }
+  },
+  "include": ["./src/**/*"]
 }

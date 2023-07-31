@@ -37,6 +37,9 @@
     "@epubly/core-win32-arm64-msvc": "0.0.1",
     "@epubly/core-win32-x64-msvc": "0.0.1"
   },
+  "files": [
+    "./dist/**/*"
+  ],
   "napi": {
     "name": "core",
     "triples": {
