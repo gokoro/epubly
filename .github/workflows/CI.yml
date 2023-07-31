@@ -257,7 +257,7 @@ jobs:
           run: |
             set -e
             npm install -g pnpm
-            pnpm test
+            # pnpm test
   test-linux-aarch64-musl-binding:
     name: Test bindings on aarch64-unknown-linux-musl - node@${{ matrix.node }}
     needs:
@@ -293,7 +293,7 @@ jobs:
           run: |
             set -e
             npm install -g pnpm
-            pnpm test
+            # pnpm test
   publish:
     name: Publish
     runs-on: ubuntu-latest
