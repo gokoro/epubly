@@ -48,8 +48,7 @@
         "aarch64-unknown-linux-musl",
         "aarch64-pc-windows-msvc"
       ]
-    },
-    "npmClient": "pnpm"
+    }
   },
   "ava": {
     "files": [
