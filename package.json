@@ -7,12 +7,13 @@
   "types": "dist/index.d.ts",
   "scripts": {
     "artifacts": "napi artifacts --dist packages",
-    "build": "pnpm build:ts && pnpm build:napi && cpy src/bindings.* dist --flat",
+    "build": "pnpm build:ts && pnpm build:napi && pnpm copy-bindings",
     "build:ts": "tsc",
     "build:napi": "napi build --platform --release --js bindings.cjs --dts bindings.d.cts --cargo-cwd ./bindings src",
     "build:debug": "napi build --platform",
     "prepublishOnly": "napi prepublish -t npm -p packages",
     "test": "ava",
+    "copy-bindings": "cpy src/bindings.* dist --flat",
     "universal": "napi universal",
     "version": "napi version -p packages"
   },
