@@ -7,8 +7,7 @@ use std::fs;
 use std::fs::File;
 use std::io::BufReader;
 use std::io::BufWriter;
-use std::io::Write;
-use std::io::{self, Read};
+use std::io::{Read, Seek, Write};
 
 use zip::ZipWriter;
 
@@ -20,11 +19,11 @@ type ZipFileWriter = zip::ZipWriter<File>;
 fn get_file_buffer(
     path: &String,
 ) -> std::io::Result<(ZipFileBufferReader, zip::ZipWriter<std::fs::File>)> {
-    let file = fs::OpenOptions::new().read(true).write(true).open(path)?;
+    let file: File = File::options().read(true).write(true).open(path)?;
 
     Ok((
         BufReader::new(file.try_clone()?),
-        zip::ZipWriter::new_append(file).unwrap(),
+        zip::ZipWriter::new_append(file.try_clone()?).unwrap(),
     ))
 }
 
@@ -46,6 +45,18 @@ fn make_dir_writable(path: &str) -> std::io::Result<()> {
     permissions.set_readonly(false);
 
     fs::set_permissions(path, permissions)
+}
+
+fn get_file_by_path(path: &str) -> std::io::Result<File> {
+    fs::OpenOptions::new().read(true).write(true).open(path)
+}
+
+fn get_zip_reader(file: File) -> zip::result::ZipResult<zip::ZipArchive<File>> {
+    zip::ZipArchive::new(file)
+}
+
+fn get_zip_writer(file: File) -> zip::result::ZipResult<zip::ZipWriter<File>> {
+    zip::ZipWriter::new_append(file)
 }
 
 #[napi(js_name = "Zip")]
@@ -86,12 +97,18 @@ impl JsZip {
 
     #[napi]
     pub fn write_file_content_by_name(&mut self, file_name: String, content: String) -> () {
-        let zip = &mut self.zip_writer;
+        let (_, mut zip) = get_by_path(&self.path);
+        // let zip = &mut self.zip_writer;
 
-        zip.start_file(file_name, Default::default()).unwrap();
+        let options = zip::write::FileOptions::default()
+            .compression_method(zip::CompressionMethod::Stored)
+            .unix_permissions(0o755)
+            .large_file(true);
+
+        zip.start_file(file_name, options).unwrap();
         zip.write_all(content.as_bytes()).unwrap();
 
-        // zip.finish().unwrap();
+        zip.finish().unwrap();
     }
 
     pub fn get_zip_writer(path: &String) -> zip::result::ZipResult<ZipWriter<File>> {
@@ -100,7 +117,7 @@ impl JsZip {
     }
 
     #[napi]
-    pub fn extract(&mut self, path: String) -> () {
+    pub fn _extract(&mut self, path: String) -> () {
         let zip_file: &mut zip::ZipArchive<BufReader<File>> = &mut self.zip_archive;
 
         for i in 0..zip_file.len() {
@@ -129,11 +146,5 @@ impl JsZip {
                 io::copy(&mut file, &mut outfile).unwrap();
             }
         }
-    }
-}
-
-impl Drop for JsZip {
-    fn drop(&mut self) {
-        let _ = self.zip_writer.finish();
     }
 }
