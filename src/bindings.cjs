@@ -252,6 +252,6 @@ if (!nativeBinding) {
   throw new Error(`Failed to load native binding`)
 }
 
-const { Zip } = nativeBinding
+const { Epub } = nativeBinding
 
-module.exports.Zip = Zip
+module.exports.Epub = Epub

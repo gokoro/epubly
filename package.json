@@ -8,6 +8,7 @@
   "scripts": {
     "artifacts": "napi artifacts --dist packages",
     "build": "pnpm build:ts && pnpm build:napi && pnpm copy-bindings",
+    "build:dev": "pnpm build:ts && pnpm build:napi && pnpm copy-bindings && cpy src/*.node dist --flat",
     "build:ts": "tsc",
     "build:napi": "napi build --platform --release --js bindings.cjs --dts bindings.d.cts --cargo-cwd ./bindings src",
     "build:debug": "napi build --platform",

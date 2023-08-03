@@ -3,92 +3,65 @@
 #[macro_use]
 extern crate napi_derive;
 
-use std::fs;
 use std::fs::File;
-use std::io::BufReader;
-use std::io::BufWriter;
 use std::io::{Read, Seek, Write};
+use zip::result::ZipResult;
+use zip::{ZipArchive, ZipWriter};
 
-use zip::ZipWriter;
-
-type ZipFileBufferReader = BufReader<File>;
-type ZipFileBufferWriter = BufWriter<File>;
-type ZipFileArchive = zip::ZipArchive<ZipFileBufferReader>;
+type ZipFileReader = zip::ZipArchive<File>;
 type ZipFileWriter = zip::ZipWriter<File>;
 
-fn get_file_buffer(
-    path: &String,
-) -> std::io::Result<(ZipFileBufferReader, zip::ZipWriter<std::fs::File>)> {
-    let file: File = File::options().read(true).write(true).open(path)?;
-
-    Ok((
-        BufReader::new(file.try_clone()?),
-        zip::ZipWriter::new_append(file.try_clone()?).unwrap(),
-    ))
-}
-
-fn get_file_struct_by_buf(path: &String) -> std::io::Result<File> {
-    fs::OpenOptions::new().read(true).write(true).open(path)
-}
-
-fn get_by_path(path: &String) -> (ZipFileArchive, ZipFileWriter) {
-    let (reader_buf, writer_buf) = get_file_buffer(path).unwrap();
-    let zip_file_reader: ZipFileArchive = zip::ZipArchive::new(reader_buf).unwrap();
-    let zip_file_writer = writer_buf;
-
-    (zip_file_reader, zip_file_writer)
-}
-
-fn make_dir_writable(path: &str) -> std::io::Result<()> {
-    let mut permissions = fs::metadata(path)?.permissions();
-    // let new_permissions = fs::Permissions::from_mode(permissions.mode() | 0o777); // add write permission
-    permissions.set_readonly(false);
-
-    fs::set_permissions(path, permissions)
-}
-
 fn get_file_by_path(path: &str) -> std::io::Result<File> {
-    fs::OpenOptions::new().read(true).write(true).open(path)
+    File::options().read(true).write(true).open(path)
 }
 
-fn get_zip_reader(file: File) -> zip::result::ZipResult<zip::ZipArchive<File>> {
-    zip::ZipArchive::new(file)
+fn get_zip_reader<R: Read + Seek>(reader: R) -> ZipResult<ZipArchive<R>> {
+    ZipArchive::new(reader)
 }
 
-fn get_zip_writer(file: File) -> zip::result::ZipResult<zip::ZipWriter<File>> {
-    zip::ZipWriter::new_append(file)
+fn get_zip_writer<W: Read + Write + Seek>(writer: W) -> ZipResult<ZipWriter<W>> {
+    ZipWriter::new_append(writer)
 }
 
-#[napi(js_name = "Zip")]
-pub struct JsZip {
-    zip_archive: ZipFileArchive,
-    zip_writer: ZipFileWriter,
+#[napi]
+pub struct Epub {
+    reader: ZipFileReader,
+    _writer: ZipFileWriter,
     path: String,
 }
 
 #[napi]
-impl JsZip {
+impl Epub {
+    fn get_writer(&self) -> ZipFileWriter {
+        let file = get_file_by_path(&self.path.to_owned()).unwrap();
+
+        get_zip_writer(file.try_clone().unwrap()).unwrap()
+    }
+
     #[napi(constructor)]
     pub fn new(path: String) -> Self {
-        let (zip_archive, zip_writer) = get_by_path(&path);
+        let file = get_file_by_path(&path.to_owned()).unwrap();
 
-        JsZip {
-            zip_archive,
-            zip_writer,
+        let reader = get_zip_reader(file.try_clone().unwrap());
+        let writer = get_zip_writer(file.try_clone().unwrap());
+
+        Epub {
             path,
+            reader: reader.unwrap(),
+            _writer: writer.unwrap(),
         }
     }
 
     #[napi]
     pub fn read_file_names(&mut self) -> Vec<String> {
-        let zip = &mut self.zip_archive;
+        let zip = &mut self.reader;
 
         zip.file_names().map(String::from).collect()
     }
 
     #[napi]
     pub fn read_file_content_by_name(&mut self, file_name: String) -> String {
-        let file = &mut self.zip_archive.by_name(&file_name).unwrap();
+        let file = &mut self.reader.by_name(&file_name).unwrap();
         let mut contents = String::new();
 
         file.read_to_string(&mut contents).unwrap();
@@ -97,54 +70,48 @@ impl JsZip {
 
     #[napi]
     pub fn write_file_content_by_name(&mut self, file_name: String, content: String) -> () {
-        let (_, mut zip) = get_by_path(&self.path);
-        // let zip = &mut self.zip_writer;
+        let mut writer = self.get_writer();
 
         let options = zip::write::FileOptions::default()
-            .compression_method(zip::CompressionMethod::Stored)
+            .compression_method(zip::CompressionMethod::DEFLATE)
             .unix_permissions(0o755)
             .large_file(true);
 
-        zip.start_file(file_name, options).unwrap();
-        zip.write_all(content.as_bytes()).unwrap();
+        writer.start_file(file_name, options).unwrap();
+        writer.write_all(content.as_bytes()).unwrap();
 
-        zip.finish().unwrap();
+        writer.finish().unwrap();
     }
 
-    pub fn get_zip_writer(path: &String) -> zip::result::ZipResult<ZipWriter<File>> {
-        let file = get_file_struct_by_buf(path).unwrap();
-        zip::ZipWriter::new_append(file)
-    }
+    // #[napi]
+    // pub fn _extract(&mut self, _path: String) -> () {
+    //     let zip_file = &mut self.reader;
 
-    #[napi]
-    pub fn _extract(&mut self, path: String) -> () {
-        let zip_file: &mut zip::ZipArchive<BufReader<File>> = &mut self.zip_archive;
+    //     for i in 0..zip_file.len() {
+    //         let mut file = zip_file.by_index(i).unwrap();
+    //         let outpath = match file.enclosed_name() {
+    //             Some(path) => path.to_owned(),
+    //             None => continue,
+    //         };
 
-        for i in 0..zip_file.len() {
-            let mut file = zip_file.by_index(i).unwrap();
-            let outpath = match file.enclosed_name() {
-                Some(path) => path.to_owned(),
-                None => continue,
-            };
-
-            if (*file.name()).ends_with('/') {
-                println!("File {} extracted to \"{}\"", i, outpath.display());
-                fs::create_dir_all(&outpath).unwrap();
-            } else {
-                println!(
-                    "File {} extracted to \"{}\" ({} bytes)",
-                    i,
-                    outpath.display(),
-                    file.size()
-                );
-                if let Some(p) = outpath.parent() {
-                    if !p.exists() {
-                        fs::create_dir_all(p).unwrap();
-                    }
-                }
-                let mut outfile = fs::File::create(&outpath).unwrap();
-                io::copy(&mut file, &mut outfile).unwrap();
-            }
-        }
-    }
+    //         if (*file.name()).ends_with('/') {
+    //             println!("File {} extracted to \"{}\"", i, outpath.display());
+    //             fs::create_dir_all(&outpath).unwrap();
+    //         } else {
+    //             println!(
+    //                 "File {} extracted to \"{}\" ({} bytes)",
+    //                 i,
+    //                 outpath.display(),
+    //                 file.size()
+    //             );
+    //             if let Some(p) = outpath.parent() {
+    //                 if !p.exists() {
+    //                     fs::create_dir_all(p).unwrap();
+    //                 }
+    //             }
+    //             let mut outfile = fs::File::create(&outpath).unwrap();
+    //             std::io::copy(&mut file, &mut outfile).unwrap();
+    //         }
+    //     }
+    // }
 }
