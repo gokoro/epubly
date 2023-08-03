@@ -1,5 +1,9 @@
 # Epubly
 
+<a href="https://www.npmjs.com/package/@epubly/core" alt="NPM URL of epubly">
+<img alt="NPM badge" src="https://img.shields.io/npm/v/%40epubly/core?style=flat-square" />
+</a>
+
 Epubly is a blazingly-fast, Rust-powered Node.js library for EPUB editing. With its powerful and flexible API, Epubly simplifies and streamlines the process of manipulating EPUB files.
 
 ## Installation
