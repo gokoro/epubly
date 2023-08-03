@@ -1,7 +1,7 @@
 {
   "name": "@epubly/core",
   "version": "0.2.1",
-  "description": "",
+  "description": "Rust-powered Node.js Library for EPUB Editing",
   "type": "module",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -67,6 +67,6 @@
     ]
   },
   "keywords": [],
-  "author": "",
+  "author": "Gokoro <lincroe@gmail.com>",
   "license": "MIT"
 }
