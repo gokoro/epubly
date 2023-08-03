@@ -8,4 +8,6 @@ export class Epub {
   readFileNames(): Array<string>
   readFileContentByName(fileName: string): string
   writeFileContentByName(fileName: string, content: string): void
+  exportFile(rawPath: string): void
+  extract(): void
 }
