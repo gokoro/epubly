@@ -85,8 +85,6 @@ impl Epub {
         let mut path = self.temp_dir.path().to_path_buf();
         path.push(file_name);
 
-        println!("{}", path.display());
-
         let mut file = File::options()
             .write(true)
             .truncate(true)
