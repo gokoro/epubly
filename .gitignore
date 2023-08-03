@@ -2,6 +2,7 @@ bindings/target
 libs
 node_modules
 *.node
+tests/test-modified.epub
 
 # Added by cargo
 #

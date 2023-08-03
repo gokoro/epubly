@@ -2,25 +2,21 @@ import test from 'ava'
 
 import { Epub } from '../src/index.js'
 
-const epub = new Epub('tests/test.epub')
+const epub = new Epub('./tests/test.epub')
 
 test.serial('Read file name', (t) => {
-  // console.log('File Content: ', epub.readFileNames())
-
+  epub.readFileNames()
   t.pass()
 })
 
 test.serial('Read file content', (t) => {
-  // console.log(
-  //   'File Content: ',
-  //   epub.readFileContentByName('EPUB/ch02s03.xhtml')
-  // )
-
+  epub.readFileContentByName('EPUB/xhtml/introduction.xhtml')
   t.pass()
 })
 
 test.serial('Write file content', (t) => {
-  // epub.writeFileContentByName('EPUB/ch02s03.xhtml', 'Test')
+  epub.extract()
+  epub.exportFile('./tests/test-modified.epub')
 
   t.pass()
 })
