@@ -30,12 +30,12 @@ epub.readFileContentByName('intro.xhtml')
 // Write to epub file and export the epub
 // You need to call the `epub.extract()` first.
 epub.extract()
-epub.epub.writeFileContentByName('intro.xhtml', 'Hello 😀')
+epub.writeFileContentByName('intro.xhtml', 'Hello 😀')
 epub.exportFile('./modified.epub')
 ```
 
 > [!NOTE]  
-> This package is designed for native ESM and don't support for CommonJS exports.
+> This package is designed for native ESM and doesn't support for CommonJS exports.
 
 ## Contributing to Epubly
 
